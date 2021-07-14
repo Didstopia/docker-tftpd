@@ -1,10 +1,12 @@
 Tftpd Docker Image
 ==================
 
+**NOTE:** This is a fork of [wastrachan/docker-tftpd](https://github.com/wastrachan/docker-tftpd) with a few additions, such as control over `tftpd` verbosity.
+
 Tftpd in a Docker container, with data directory in a volume, and a configurable UID/GID for data files.
 
-[![CircleCI](https://circleci.com/gh/wastrachan/docker-tftpd/tree/master.svg?style=svg)](https://circleci.com/gh/wastrachan/docker-tftpd/tree/master)
-[![](https://img.shields.io/docker/pulls/wastrachan/tftpd.svg)](https://hub.docker.com/r/wastrachan/tftpd)
+![GitHub Actions](https://github.com/Didstopia/docker-tftpd/actions/workflows/ci.yml/badge.svg)
+[![](https://img.shields.io/docker/pulls/didstopia/tftpd.svg)](https://hub.docker.com/r/didstopia/tftpd)
 
 ## Install
 
@@ -12,14 +14,14 @@ Tftpd in a Docker container, with data directory in a volume, and a configurable
 Pull the latest image from Docker Hub:
 
 ```shell
-docker pull wastrachan/tftpd
+docker pull didstopia/tftpd:latest
 ```
 
 #### Manually
 Clone this repository, and run `make build` to build an image:
 
 ```shell
-git clone https://github.com/wastrachan/docker-tftpd.git
+git clone https://github.com/Didstopia/docker-tftpd.git
 cd docker-tftpd
 make build
 ```
@@ -39,8 +41,9 @@ docker run -v "$(pwd)/data:/data" \
            -p 69:69/udp \
            -e PUID=1111 \
            -e PGID=1112 \
+           -e TFTPD_DEBUG=true \
            --restart unless-stopped \
-           wastrachan/tftpd:latest
+           didstopia/tftpd:latest
 ```
 
 
@@ -53,11 +56,12 @@ version: "2"
 
 services:
   tftpd:
-    image: wastrachan/tftpd
+    image: didstopia/tftpd:latest
     container_name: tftpd
     environment:
       - PUID=1111
       - PGID=1112
+      - TFTPD_DEBUG=true
     volumes:
       - </path/to/data>:/data
     ports:

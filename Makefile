@@ -19,19 +19,31 @@ help:
 build: .tftpd.img
 
 .tftpd.img:
-	docker build -t wastrachan/tftpd:latest .
+	docker build -t didstopia/tftpd:latest .
 	@touch $@
 
 .PHONY: run
 run: build
 	docker run -v "$(CURDIR)/data:/data" \
-	           --name tftpd \
-	           -p 69:69/udp \
-	           -e PUID=1111 \
-	           -e PGID=1112 \
-	           --restart unless-stopped \
-	           -d \
-	           wastrachan/tftpd:latest
+						 --name tftpd \
+						 -p 69:69/udp \
+						 -e PUID=1111 \
+						 -e PGID=1112 \
+						 -e TFTPD_DEBUG=true \
+						 -it \
+						 --rm \
+						 didstopia/tftpd:latest
+
+run-shell: build
+	docker run -v "$(CURDIR)/data:/data" \
+						 --name tftpd \
+						 -p 69:69/udp \
+						 -e PUID=1111 \
+						 -e PGID=1112 \
+						 -e TFTPD_DEBUG=true \
+						 -it \
+						 --rm \
+						 didstopia/tftpd:latest /bin/sh
 
 .PHONY: stop
 stop:
@@ -44,4 +56,4 @@ clean:
 
 .PHONY: delete
 delete: clean
-	docker rmi -f wastrachan/tftpd
+	docker rmi -f didstopia/tftpd
