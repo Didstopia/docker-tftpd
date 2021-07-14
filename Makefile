@@ -30,7 +30,6 @@ run: build
 						 -e PUID=1111 \
 						 -e PGID=1112 \
 						 -e TFTPD_DEBUG=true \
-						 -it \
 						 --rm \
 						 didstopia/tftpd:latest
 
