@@ -8,6 +8,11 @@ PGID="${PGID:-101}"
 
 CMD="$@"
 
+# Start syslog
+# touch /var/log/syslog
+/usr/sbin/syslog-ng
+# /usr/sbin/syslog-ng --cfgfile=/etc/syslog-ng/syslog-ng.conf --verbose
+
 # Convert all files and folder to lowercase
 set +e
 for i in `find /data/ -type d && find /data/ -type f`; do
@@ -47,4 +52,7 @@ chown -R $PUID:$PGID /data
 echo "Executing command: ${CMD}"
 echo
 
-exec $CMD
+tail -f /dev/stdout /dev/stderr /var/log/messages &
+
+eval "${CMD}"
+# exec $CMD
