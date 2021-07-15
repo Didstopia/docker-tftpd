@@ -1,3 +1,8 @@
 #!/bin/execlineb -P
 
-/usr/sbin/in.tftpd --port-range 4096:32767 -m /var/lib/tftpboot/pxelinux.cfg/remap --foreground --user tftpd --secure /data
+# In certain environments the network’s MTU may cause TFTP UDP packets to get fragmented.
+# Certain PXE firmwares struggle to reconstruct the fragmented packets which can cause significant slow down or even prevent the server from PXE booting.
+# In order to avoid this, TFTPd provides an option to limit the packet size so that it they do not get fragmented.
+# Eg. "--blocksize <MAX MTU minus 32>"
+
+/usr/sbin/in.tftpd --port-range 4096:32767 -m /var/lib/tftpboot/pxelinux.cfg/remap --blocksize 1468 --foreground --user tftpd --secure /data

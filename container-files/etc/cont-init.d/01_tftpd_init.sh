@@ -15,11 +15,15 @@ set -e
 sed -i "s/^tftpd\:x\:100\:101/tftpd\:x\:$PUID\:$PGID/" /etc/passwd
 sed -i "s/^tftpd\:x\:101/tftpd\:x\:$PGID/" /etc/group
 
+## NOTE: It has NOT been confirmed whether tftp-hpa actually supports
+##       more then 4 levels of verbosity!
 if [ "${TFTPD_DEBUG,,}" = "true" ]; then
-  sed -i 's/\/data$/\/data --verbosity 4/' /etc/services.d/in.tftpd/run
+  # sed -i 's/\/data$/\/data --verbosity 4/' /etc/services.d/in.tftpd/run
+  sed -i 's/\/data$/\/data --verbosity 10/' /etc/services.d/in.tftpd/run
   # cat /etc/services.d/in.tftpd/run
 else
-  sed -i 's/\ --verbosity 4$//' /etc/services.d/in.tftpd/run
+  # sed -i 's/\ --verbosity 4$//' /etc/services.d/in.tftpd/run
+  sed -i 's/\ --verbosity 10$//' /etc/services.d/in.tftpd/run
   # cat /etc/services.d/in.tftpd/run
 fi
 

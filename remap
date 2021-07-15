@@ -1,2 +1,13 @@
+# Convert backslashes to slashes
 rg \\ /
+
+# Warn of possible problems with loading on some network adapters when
+# the client tries to request the file "pxelinux.0M- ^" or "pxelinux.0ÿ"
+# instead of "pxelinux.0" etc.
+ri (.*)ÿ$ \1
+ri (.*)M-\^\?$ \1
+ri (pxelinux\.0).*$ \1
+
+# I'm assuming this one just escapes non-ascii characters?
+# (probably wrong about that though, haven't looked into it much)
 rg ([A-Z]) \L\1
